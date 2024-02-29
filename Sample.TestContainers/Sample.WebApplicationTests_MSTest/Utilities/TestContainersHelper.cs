@@ -1,12 +1,12 @@
 ﻿using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 
-namespace Sample.WebApplicationTests.Utilities;
+namespace Sample.WebApplicationTests_MSTest.Utilities;
 
 /// <summary>
-/// Class MssqlFixture
+/// Class TestContainersHelper
 /// </summary>
-public static class MssqlFixture
+public static class TestContainersHelper
 {
     /// <summary>
     /// 使用 Testcontainers-dotnet 建立 Database Container.
@@ -14,7 +14,7 @@ public static class MssqlFixture
     /// <param name="databaseSetting"></param>
     /// <param name="typeOfTarget"></param>
     /// <returns></returns>
-    public static IContainer CreateContainer(Mssql databaseSetting, Type typeOfTarget)
+    public static IContainer CreateDatabaseContainer(Mssql databaseSetting, Type typeOfTarget)
     {
         var environmentName = TestSettingProvider.GetEnvironmentName(typeOfTarget);
         var containerName = databaseSetting.ContainerName;
@@ -25,7 +25,10 @@ public static class MssqlFixture
                         .WithName($"{environmentName}-{containerName}")
                         .WithPortBinding(databaseSetting.HostPort, databaseSetting.ContainerPort)
                         .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(databaseSetting.ContainerPort))
+                        .WithAutoRemove(true)
                         .Build();
+
+        container.StartAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 
         return container;
     }

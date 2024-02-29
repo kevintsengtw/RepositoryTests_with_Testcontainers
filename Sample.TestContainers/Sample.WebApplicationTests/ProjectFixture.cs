@@ -27,7 +27,7 @@ public class ProjectFixture : IAsyncLifetime
 
     private static string DatabaseName => "Sample";
 
-    private static TestcontainersContainer _mssqlContainer;
+    private static IContainer _mssqlContainer;
 
     private static string MasterConnectionString =>
         string.Format(TestDbConnection.Container.Master, DatabaseIp, DatabaseSaPassword);

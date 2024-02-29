@@ -1,4 +1,5 @@
 ﻿using Sample.WebApplication.Infrastructure.Models;
+using Sample.WebApplication.Infrastructure.Repository;
 using Sample.WebApplicationTests.TestData;
 using Sample.WebApplicationTests.Utilities.Database;
 
@@ -9,8 +10,11 @@ namespace Sample.WebApplicationTests.Infrastructure.Repository;
 /// </summary>
 public class ShipperRepositoryClassFixture : RepositoryFixture, IDisposable
 {
+    public readonly ShipperRepository SystemUnderTest;
+    
     public ShipperRepositoryClassFixture()
     {
+        this.SystemUnderTest = new ShipperRepository(DatabaseHelper);
         this.CreateTable();
     }
 
@@ -21,16 +25,16 @@ public class ShipperRepositoryClassFixture : RepositoryFixture, IDisposable
 
     private void CreateTable()
     {
-        TableCommands.Drop(this.SampleConnectionString, TableNames.Shippers);
+        TableCommands.Drop(ProjectFixture.SampleDbConnectionString, TableNames.Shippers);
 
         var filePath = Path.Combine("TestData", "TableSchemas", "Sample_Shippers_Create.sql");
         var script = File.ReadAllText(filePath);
-        TableCommands.Create(this.SampleConnectionString, script);
+        TableCommands.Create(ProjectFixture.SampleDbConnectionString, script);
     }
 
     private void DropTable()
     {
-        TableCommands.Drop(this.SampleConnectionString, TableNames.Shippers);
+        TableCommands.Drop(ProjectFixture.SampleDbConnectionString, TableNames.Shippers);
     }
 
     public static void InsertData(ShipperModel model)
