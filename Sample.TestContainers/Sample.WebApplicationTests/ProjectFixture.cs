@@ -37,9 +37,8 @@ public class ProjectFixture : IAsyncLifetime
 
     public ProjectFixture()
     {
-        TestSettingProvider.SettingFile = SettingFile;
-
         //-- Create Mssql Server
+        TestSettingProvider.SettingFile = SettingFile;
         var databaseSettings = TestSettingProvider.GetDatabaseSettings();
         DatabaseIp = $"127.0.0.1,{databaseSettings.HostPort}";
         DatabaseSaPassword = databaseSettings.SaPassword;
